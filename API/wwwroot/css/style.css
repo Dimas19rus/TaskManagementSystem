@@ -1,0 +1,73 @@
+.card-header {
+    background-color: inherit;
+}
+
+
+.status-head-appointed {
+    background: darkgrey;
+}
+
+.status-head-performed {
+    background: #fcc326;
+}
+
+.status-head-suspended {
+    background: #fc5d5d;
+}
+
+.status-head-completed {
+    background: #52c728;
+}
+
+
+.status-border-appointed {
+    border-color: #d1d1d1;
+}
+
+.status-border-performed {
+    border-color: #facb48;
+}
+
+.status-border-suspended {
+    border-color: #faa7a7;
+}
+
+.status-border-completed {
+    border-color: #91e075;
+}
+
+
+.bd-layout {
+    grid-template-columns: 2fr 6fr;
+}
+
+.field-validation-error {
+    color: #b94a48;
+}
+
+.field-validation-valid {
+    display: none;
+}
+
+input.input-validation-error {
+    border: 1px solid #b94a48;
+}
+
+input[type="checkbox"].input-validation-error {
+    border: 0 none;
+}
+
+.validation-summary-errors {
+    color: #b94a48;
+}
+
+.validation-summary-valid {
+    display: none;
+}
+
+.text-middle {
+    vertical-align: middle;
+}
+
+
+

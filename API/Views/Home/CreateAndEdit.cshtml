@@ -1,0 +1,130 @@
+﻿@model NewMainTask
+
+@{
+    Layout = null;
+}
+
+
+@if (Model.OldNumberStatus == -1)
+{
+    Model.OldNumberStatus = Model.NumberStatus;
+}
+
+
+@{Model.Deadline = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);}
+<form asp-action="CreateAndEdit" asp-route-id="@Model.ID" onsubmit="return jQueryAjaxPost(this);">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <input type="hidden" asp-for="DateRegistration" />
+    <input type="hidden" asp-for="OldNumberStatus" />
+
+    <div class="row">
+        <div class="col">
+            <div class="mb-3">
+                <label class="col-form-label">@ViewData["Name"]</label>
+                <input asp-for="Name" class="form-control">
+                @Html.ValidationMessage("Name", ViewData["ErrorNull"].ToString(), "text-danger")
+
+            </div>
+
+            <div class="mb-3">
+                <label class="col-form-label">@ViewData["Description"]</label>
+                <textarea asp-for="Description" class="form-control"></textarea>
+                @Html.ValidationMessage("Description", ViewData["ErrorNull"].ToString(), "text-danger")
+            </div>
+
+            <div class="mb-3">
+                <label class="col-form-label">@ViewData["Performers"]:</label>
+                <input asp-for="Performers" class="form-control">
+                @Html.ValidationMessage("Performers", ViewData["ErrorNull"].ToString(), "text-danger")
+            </div>
+
+        </div>
+        <div class="col">
+
+            <div class="mb-3">
+                <label class="col-form-label">@ViewData["PlannedLaborIntensity"]:</label>
+                <input asp-for="PlannedLaborIntensity" class="form-control">
+                @Html.ValidationMessage("PlannedLaborIntensity", "", "text-danger")
+            </div>
+            @if (Model.ID != 0)
+            {
+                <div class="mb-3">
+                    <label class="col-form-label">@ViewData["PlannedLaborIntensitySumMainAndSubTasks"]:</label>
+                    <input asp-for="PlannedLaborIntensitySumMainAndSubTasks" class="form-control" disabled>
+                </div>
+            }
+
+
+            @if (Model.ID != 0)
+            {
+                <div class="mb-3">
+                    <label class="col-form-label">@ViewData["FactualLaborIntensity"]:</label>
+                    <input asp-for="FactualLaborIntensity" class="form-control">
+                    @Html.ValidationMessage("FactualLaborIntensity", ViewData["ErrorNull"].ToString(), "text-danger")
+                </div>
+            }
+            else
+            {
+                <input type="hidden" asp-for="FactualLaborIntensity" />
+            }
+
+            <div class="mb-3">
+
+                <label class="col-form-label">@ViewData["Deadline"]:</label>
+                <input asp-for="Deadline" class="form-control">
+                @Html.ValidationMessage("Deadline", ViewData["ErrorNull"].ToString(), "text-danger")
+            </div>
+
+            <div class="mb-3">
+                <label class="col-form-label">@ViewData["Status"]:</label><br />
+                <select class="form-control form-select form-select-lg mb-3" aria-label=".form-select-lg example" asp-for="NumberStatus">
+                    <option value="0">Назначена</option>
+                    <option value="1">Выполняется</option>
+                    @if (Model.OldNumberStatus == 1)
+                    {
+                        <option value="2">Приостановлена</option>
+                    }
+                    else
+                    {
+                        <option disabled="disabled">Приостановлена</option>
+
+                    }
+                    @if (Model.AllSubTasks.All(t => t.NumberStatus == 1) && Model.OldNumberStatus == 1)
+                    {
+                        <option value="3">Завершена</option>
+                    }
+                    else
+                    {
+                        <option disabled="disabled">Завершена</option>
+                    }
+                </select>
+
+            </div>
+
+        </div>
+    </div>
+
+    <div class="mb-3">
+        <label class="col-form-label">@ViewData["Parent"]:</label><br />
+        <select class="form-control form-select form-select-lg mb-3" aria-label=".form-select-lg example" asp-for="ParentId" asp-items="@Model.Tasks">
+            <option value="0">-</option>
+        </select>
+    </div>
+
+    <hr />
+    <div class="form-group ">
+        <div class="align-content-center">
+            <input type="submit" value="@ViewData["Apply"]" class="btn btn-block btn-success" />
+        </div>
+    </div>
+
+</form>
+
+
+<script>
+    $(function () {
+        $('#datetimepicker2').datetimepicker({
+            locale: 'ru'
+        });
+    });
+</script>

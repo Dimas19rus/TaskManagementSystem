@@ -1,0 +1,105 @@
+﻿@model HomeViewModel
+
+<div id="content-results" >
+
+    <div class="card shadow-sm " >
+        <h5 class="card-header text-center status-head-@(((Status) Model.SelectedTask.NumberStatus).ToString().ToLower()) " >@Model.SelectedTask.Name </h5>
+
+        <div class="card-body text-dark" style="background: #F0F0F0" >
+            <div class="container" >
+                <div class="row" >
+                    <div class="col" >
+                        <h6 class="card-title" >@Model.SelectedTask.Description </h6><br/>
+                    </div>
+                    <div class="col" >
+                        <b>@ViewData["Performers"]:</b><br/>
+                        @Model.SelectedTask.Performers <br/>
+                        <b>@ViewData["Status"]:</b> @ViewData[((Status) Model.SelectedTask.NumberStatus).ToString()]<br/>
+                    </div>
+                </div>
+            </div>
+            <hr/>
+            <b>@ViewData["DateRegistration"]:</b> @Model.SelectedTask.DateRegistration<br/>
+            <b>@ViewData["Deadline"]:</b> @Model.SelectedTask.Deadline<br/>
+
+            <b>@ViewData["PlannedLaborIntensity"]:</b> @Model.SelectedTask.PlannedLaborIntensity<br/>
+            <b>@ViewData["FactualLaborIntensity"]:</b> @Model.SelectedTask.FactualLaborIntensity<br/>
+            <hr/>
+
+            <a onclick="showInPopup('@Url.Action("CreateAndEdit", "Home", new {id = Model.SelectedTask.ID}, Context.Request.Scheme)', '@ViewData["Update task"]')" class="btn btn-info text-white" >
+                @ViewData["Edit"]
+            </a>
+            @if (Model.SubTasks.Count == 0)
+            {
+                <form asp-action="Delete" asp-route-id="@Model.SelectedTask.ID" onsubmit="return jQueryAjaxDelete(this)" class="d-inline" >
+                    <input type="hidden" asp-for="@Model.SelectedTask.ID"/>
+                    <input type="submit" value="@ViewData["Delete"]" class="btn btn-danger"/>
+                </form>
+            }
+            else
+            {
+                <button class="btn  btn-danger shadow-none" disabled type="button" >@ViewData["Delete"]</button>
+            }
+        </div>
+    </div>
+
+    <h5 class="mt-4 text-center" >@ViewData["SubTask"]:</h5>
+
+    <table class="table table-striped" >
+        <thead>
+        <tr class="pb-2 pt-2" >
+            <th scope="col" >
+                @ViewData["Name"]
+            </th>
+            <th scope="col" >
+                @ViewData["Deadline"]
+            </th>
+            <th scope="col">
+                @ViewData["Status"]
+            </th>
+            <th scope="col" >
+
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var item in Model.SubTasks)
+        {
+            <tr class="pb-2 pt-2 " >
+                <td scope="col" >
+                    @item.Name
+                </td>
+                <td scope="col" >
+                    @item.Deadline
+                </td>
+                <td scope="col" >
+                    <span class="border-0 rounded-circle" ></span>
+                    @ViewData[((Status) Model.SelectedTask.NumberStatus).ToString()]
+                </td>
+                <td scope="col" >
+                    <div>
+                        <button onclick="showInPopup('@Url.Action("CreateAndEdit", "Home", new {id = item.ID}, Context.Request.Scheme)', '@ViewData["Update task"]')" class="btn btn-info btn-sm">
+                            <img src="~/lib/bootstrap/dist/icon/pencil-fill.svg" />
+                        </button>
+                        @if (Model.Tasks.All(i => i.ParentId != item.ID))
+                        {
+                            <form asp-action="Delete" asp-route-id="@item.ID" onsubmit="return jQueryAjaxDelete(this)" class="d-inline" >
+                                <input type="hidden" asp-for="@item.ID"/>
+
+                                <input class="btn btn-danger btn-sm " src="~/lib/bootstrap/dist/icon/trash-fill.svg" type="image" >
+                            </form>
+                        }
+                        else
+                        {
+                    <button class="btn btn-danger btn-sm shadow-none" disabled >
+                        <img src="~/lib/bootstrap/dist/icon/trash-fill.svg" />
+                    </button>
+                        }
+
+                    </div>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>

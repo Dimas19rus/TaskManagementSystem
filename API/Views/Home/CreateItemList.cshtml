@@ -1,0 +1,23 @@
+﻿@model HomeViewModel
+
+@if (!Model.CompleadTasks.Any(i => i.ID == Model.SelectedTask.ID))
+{
+    if (!Model.Tasks.Any(i => i.ParentId == Model.SelectedTask.ID))
+    {
+        <li>
+            <div class="treeview-animated-element" onclick="loadcontent(@Model.SelectedTask.ID, '@Url.Action("ParentSearch", "Home")')" >@Model.SelectedTask.Name</div>
+        </li>
+        Model.CompleadTasks.Add(Model.SelectedTask);
+    }
+    else
+    {
+        Model.CompleadTasks.Add(Model.SelectedTask);
+        <div>
+            <a class="closed" >
+                <i class="fa-angle-right fas" ></i>
+                <span class="mx-1" onclick="loadcontent(@Model.SelectedTask.ID, '@Url.Action("ParentSearch", "Home")')" >@Model.SelectedTask.Name</span>
+            </a>
+            <partial model="Model" name="CreateSubList"/>
+        </div>
+    }
+}

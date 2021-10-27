@@ -1,0 +1,31 @@
+﻿@model HomeViewModel
+<div class=" container-flex my-2 " >
+    <div class="justify-content-md-center row">
+        <div class="border treeview-animated m-3 bd-example col-md-auto shadow-lg  bg-white rounded col col-mg-auto" style="background: white;">
+            <a onclick="showInPopup('@Url.Action("CreateAndEdit", "Home", null, Context.Request.Scheme)', '@ViewData["New task"]')" class="btn btn-success text-white container-fluid">
+                @ViewData["AddSubTask"]
+            </a>
+            <ul class="pr-3 treeview-animated-list">
+                @foreach (var task in Model.Tasks)
+                {
+                    Model.SelectedTask = task;
+
+                    if (!Model.CompleadTasks.Any(i => i == task))
+                    {
+                        <partial model="Model" name="CreateList" />
+                    }
+                }
+
+            </ul>
+        </div>
+        <link href="~/lib/bootstrap/dist/css/bootstrap.min.css">
+        <div class="border bd-example m-3 shadow-lg  bg-white rounded col" id="view-all" style="background: white;">
+            <div id="results" >
+                @if (Model.SelectedTask != null)
+                {
+                <partial model="Model" name="ParentSearch" />
+                }
+            </div>
+        </div>
+    </div>
+</div>

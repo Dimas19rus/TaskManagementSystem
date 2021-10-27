@@ -1,0 +1,14 @@
+﻿@model HomeViewModel
+
+@{
+    Model.SubTasks = Model.Tasks.Where(i => i.ParentId == Model.SelectedTask.ID).ToList();
+}
+
+<ul class="nested">
+    @foreach (var subItem in Model.SubTasks)
+    {
+        Model.SelectedTask = subItem;
+
+        <partial model="Model" name="CreateItemList" />
+    }
+</ul>
